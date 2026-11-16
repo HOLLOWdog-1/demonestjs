@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -13,7 +14,6 @@ import {
 import { PostService } from './post.service.js';
 import { createPostSchema } from './dto/create-post.dto.js';
 import { updatePostSchema } from './dto/update-post.dto.js';
-import type { CreatePostDto } from './dto/create-post.dto.js';
 import type { UpdatePostDto } from './dto/update-post.dto.js';
 
 @Controller('post')
@@ -21,8 +21,19 @@ export class PostController {
   constructor(private readonly postService: PostService) {}
 
   @Post('create')
-  create(@Body({ schema: createPostSchema }) dto: CreatePostDto) {
-    return this.postService.create(dto);
+  create(@Body() body: unknown, @Query() query: unknown) {
+    // 兼容两种发送方式：JSON/form-data body，或 query string（body 为空时取 query）
+    const raw =
+      body && typeof body === 'object' && Object.keys(body).length > 0
+        ? body
+        : query;
+    const parsed = createPostSchema.safeParse(raw);
+    if (!parsed.success) {
+      throw new BadRequestException(
+        parsed.error.issues.map((issue) => issue.message).join('；'),
+      );
+    }
+    return this.postService.create(parsed.data);
   }
 
   @Get('list')
