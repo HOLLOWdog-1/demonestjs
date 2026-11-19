@@ -1,16 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import type { Response } from 'express';
-import { ChatOllama } from '@langchain/ollama';
+import { ChatOpenAI } from '@langchain/openai';
 import { HumanMessage, SystemMessage } from '@langchain/core/messages';
 import { StringOutputParser } from '@langchain/core/output_parsers';
 import { config } from '../config.js';
 
 @Injectable()
 export class ModelsService {
-  private llm = new ChatOllama({
-    model: config.ollama.chatModel,
-    baseUrl: config.ollama.baseUrl,
-    temperature: config.ollama.temperature,
+  private llm = new ChatOpenAI({
+    model: config.deepseek.chatModel,
+    apiKey: config.deepseek.apiKey,
+    configuration: {
+      baseURL: config.deepseek.baseUrl,
+    },
+    temperature: config.deepseek.temperature,
   });
 
   // 基础调用
