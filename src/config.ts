@@ -43,4 +43,11 @@ export const config = {
     // 保留此字段供后续切换 deepseek-chat 时使用
     temperature: 0.3,
   },
+
+  langGraph: {
+    model:       process.env.LANGGRAPH_MODEL  || 'qwen2.5-coder:3b',
+    baseURL:     process.env.OLLAMA_BASE_URL  || 'http://localhost:11434/v1',
+    apiKey:      'ollama',    // Ollama 不校验 apiKey，随便填个占位符即可
+    temperature: 0.7,
+  },
 };
