@@ -15,8 +15,6 @@ import { MemoryModule } from './memory/memory.module.js';
 import { RagModule } from './rag/rag.module.js';
 import { FunctionCallingModule } from './function-calling/function-calling.module.js';
 import { LanggraphModule } from './langgraph/langgraph.module.js';
-import { LanggraphService } from './langgraph/langgraph.service.js';
-import { LanggraphController } from './langgraph/langgraph.controller.js';
 
 export const { ObserveModule, ObserveInstrument } = createObserveModule();
 
@@ -44,7 +42,7 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
     FunctionCallingModule,
     LanggraphModule
   ],
-  controllers: [AppController, LanggraphController],
-  providers: [AppService, LanggraphService],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}

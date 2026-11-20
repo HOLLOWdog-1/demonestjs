@@ -2,12 +2,15 @@
 
 import { Module } from '@nestjs/common'
 import { LanggraphController } from './langgraph.controller.js'
+import { ReactAgentService } from './react-agent.service.js';
+import { RoutingService } from './routing.service.js';
+import { ParallelService } from './parallel.service.js';
 import { LanggraphService }    from './langgraph.service.js'
 import { ArticleService }      from './article.service.js'
 
 @Module({
   controllers: [LanggraphController],
-  providers:   [LanggraphService, ArticleService],
+  providers:   [LanggraphService, ArticleService, ReactAgentService, RoutingService, ParallelService],
   exports:     [LanggraphService, ArticleService],
 })
   export class LanggraphModule {}
