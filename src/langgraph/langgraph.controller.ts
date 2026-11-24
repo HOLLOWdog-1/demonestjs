@@ -6,6 +6,12 @@ import { ArticleService } from './article.service.js';
 import { ReactAgentService } from './react-agent.service.js';
 import { RoutingService } from './routing.service.js';
 import { ParallelService } from './parallel.service.js';
+import { EmailApprovalService } from './email-approval.service.js';
+import {
+  emailStartSchema,
+  emailModifySchema,
+  threadIdSchema,
+} from './dto/email.dto.js';
 
 @Controller('langgraph')
 export class LanggraphController {
@@ -15,6 +21,7 @@ export class LanggraphController {
     private readonly reactSvc: ReactAgentService,
     private readonly routingSvc: RoutingService,
     private readonly parallelSvc: ParallelService,
+    private readonly emailSvc: EmailApprovalService,
   ) {}
 
   // ── 第一章接口 ──────────────────────────────────────
@@ -59,5 +66,41 @@ export class LanggraphController {
   @HttpCode(200)
   parallel(@Body() body: { task: string }) {
     return this.parallelSvc.run(body.task);
+  }
+
+  @Post('email/start')
+  emailStart(
+    @Body({ schema: emailStartSchema })
+    body: {
+      request: string;
+      threadId: string;
+    },
+  ) {
+    return this.emailSvc.start(body.request, body.threadId);
+  }
+
+  @Post('email/:threadId/approve')
+  emailApprove(
+    @Param('threadId', { schema: threadIdSchema }) threadId: string,
+  ) {
+    return this.emailSvc.approve(threadId);
+  }
+
+  @Post('email/:threadId/reject')
+  emailReject(@Param('threadId', { schema: threadIdSchema }) threadId: string) {
+    return this.emailSvc.reject(threadId);
+  }
+
+  @Post('email/:threadId/modify')
+  emailModify(
+    @Param('threadId', { schema: threadIdSchema }) threadId: string,
+    @Body({ schema: emailModifySchema }) body: { feedback: string },
+  ) {
+    return this.emailSvc.requestModify(threadId, body.feedback);
+  }
+
+  @Get('email/:threadId/state')
+  emailState(@Param('threadId', { schema: threadIdSchema }) threadId: string) {
+    return this.emailSvc.getState(threadId);
   }
 }

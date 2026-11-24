@@ -8,12 +8,13 @@ import { ParallelService } from './parallel.service.js';
 import { SupervisorService } from './supervisor.service.js';
 import { PipelineService } from './pipeline.service.js';
 import { CodeReviewService } from './code-review.service.js';
+import { EmailApprovalService } from './email-approval.service.js';
 import { LanggraphService }    from './langgraph.service.js'
 import { ArticleService }      from './article.service.js'
 
 @Module({
   controllers: [LanggraphController],
-  providers:   [LanggraphService, ArticleService, ReactAgentService, RoutingService, ParallelService, SupervisorService, PipelineService, CodeReviewService],
+  providers:   [LanggraphService, ArticleService, ReactAgentService, RoutingService, ParallelService, SupervisorService, PipelineService, CodeReviewService, EmailApprovalService],
   exports:     [LanggraphService, ArticleService],
 })
   export class LanggraphModule {}
